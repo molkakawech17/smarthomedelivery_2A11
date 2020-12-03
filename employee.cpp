@@ -178,17 +178,17 @@ QSqlQueryModel *employee::getMattri()
 }
 
 
-QSqlQueryModel * employee::getemployeestriidA()
+QSqlQueryModel * employee::getemployeestriid()
 {
     QSqlQuery *q=new QSqlQuery();
     QSqlQueryModel *model = new QSqlQueryModel();
-    q->prepare("SELECT * FROM  employeee ORDER BY CIN ASC");
+    q->prepare("SELECT * FROM  employee ORDER BY CIN ASC");
     q->exec();
     model->setQuery(*q);
     return model;
 }
 
-QSqlQueryModel * employee::getemployeestridateA()
+QSqlQueryModel * employee::getemployeestriprenom()
 {
     QSqlQuery *q=new QSqlQuery();
     QSqlQueryModel *model = new QSqlQueryModel();
@@ -198,41 +198,30 @@ QSqlQueryModel * employee::getemployeestridateA()
     return model;
 }
 
-QSqlQueryModel * employee::getemployeestrinomA()
+QSqlQueryModel * employee::getemployeestrinom()
 {
     QSqlQuery *q=new QSqlQuery();
     QSqlQueryModel *model = new QSqlQueryModel();
-    q->prepare("SELECT * FROM  employee ORDER BY PRIX ASC");
+    q->prepare("SELECT * FROM  employee ORDER BY nom ASC");
     q->exec();
     model->setQuery(*q);
     return model;
 }
 
-QSqlQueryModel * employee::getemployeestriidD()
+QSqlQueryModel * employee::getemployeestriposte()
 {
     QSqlQuery *q=new QSqlQuery();
     QSqlQueryModel *model = new QSqlQueryModel();
-    q->prepare("SELECT * FROM  employee ORDER BY CIN DESC");
+    q->prepare("SELECT * FROM  employee ORDER BY poste ASC");
     q->exec();
     model->setQuery(*q);
     return model;
 }
-
-QSqlQueryModel * employee::getemployeestridateD()
+QSqlQueryModel * employee::getemployeestriage()
 {
     QSqlQuery *q=new QSqlQuery();
     QSqlQueryModel *model = new QSqlQueryModel();
-    q->prepare("SELECT * FROM  employee ORDER BY Prenom DESC");
-    q->exec();
-    model->setQuery(*q);
-    return model;
-}
-
-QSqlQueryModel * employee::getemployeestrinomD()
-{
-    QSqlQuery *q=new QSqlQuery();
-    QSqlQueryModel *model = new QSqlQueryModel();
-    q->prepare("SELECT * FROM  employee ORDER BY LIEU DESC");
+    q->prepare("SELECT * FROM  employee ORDER BY age ASC");
     q->exec();
     model->setQuery(*q);
     return model;

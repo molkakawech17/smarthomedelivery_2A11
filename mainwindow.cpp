@@ -17,6 +17,8 @@ MainWindow::MainWindow(QWidget *parent)
    ,  ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    connect(ui->sendBtn, SIGNAL(clicked()),this, SLOT(sendMail()));
+    connect(ui->exitBtn, SIGNAL(clicked()),this, SLOT(close()));
 }
 
 MainWindow::~MainWindow()
@@ -39,8 +41,7 @@ void MainWindow::on_ajouter_prod_4_clicked()
      p->ajouter_employee();
 
 
-     /* employee *p=new employee( ID,  NOM, QTT,  etat,   prix);
-     p->ajouter_employee();*/
+
 }
 
 
@@ -64,6 +65,7 @@ void MainWindow::on_tabWidget_4_tabBarClicked(int index)
 {
     employee *a = new employee();
      ui->tableView_course_3->setModel(a->getAllemployee());
+
 }
 
 
@@ -77,8 +79,10 @@ void MainWindow::on_modif_prod_6_clicked()
     QString prenom=ui->modif_qtt_prod_4->text();
     QString poste = ui->modif_nom_prod_4->text();
     employee *p=new employee( ID,  NOM, age,  prenom,   poste);
+    //if (){
     p->modifier_employee(ID);
-
+  //  }
+   // else (QDebug<>);
 }
 
 void MainWindow::on_trouv_prod_3_clicked()
@@ -109,9 +113,9 @@ void MainWindow::on_ajouter_prod_5_clicked()
     QString salaire= ui->edit_id_prod_10->text();
     int duree=ui->edit_id_prod_12->text().toInt() ;
     QString datedeb= ui->edit_id_prod_11->text();
-    QString numero = ui->edit_id_prod_13->text();
+    QString EMAIL = ui->edit_id_prod_13->text();
 
-   contrat  *p =new contrat( ID,  salaire, duree,  datedeb,   numero);
+   contrat  *p =new contrat( ID,  salaire, duree,  datedeb,   EMAIL);
 
       p->ajouter_contrat() ;
 }
@@ -134,8 +138,8 @@ void MainWindow::on_modif_prod_7_clicked()
     QString salaire= ui->modif_qtt_prod_7->text();
     int datedeb= ui->modif_qtt_prod_8->text().toInt();
     QString duree=ui->modif_qtt_prod_6->text();
-    QString numero = ui->modif_qtt_prod_9->text();
-    contrat  *p =new contrat( ID,  salaire, datedeb,  duree,   numero);
+    QString EMAIL = ui->modif_qtt_prod_9->text();
+    contrat  *p =new contrat( ID,  salaire, datedeb,  duree,   EMAIL);
     p->modifier_contrat(ID);
 
 }
@@ -154,17 +158,9 @@ void MainWindow::on_trouv_prod_4_clicked()
       ui->modif_qtt_prod_7->setText(tmp.getsalaire());
       ui->modif_qtt_prod_8->setText(duree);
       ui->modif_qtt_prod_6->setText(tmp.getdatedeb());
-      ui->modif_qtt_prod_9->setText(tmp.getnumero());
+      ui->modif_qtt_prod_9->setText(tmp.getEMAIL());
 }
 
-/*void MainWindow::on_pushButton_3_clicked()
-{
-    QString ch = ui->edit_rechavanc_prod_3->text();
-    QString sh = ui->edit_rechavanc_prod_4->text();
-
-    employee *p=new employee();
-    ui->tableView_course_3->setModel(p->getAllemployeeavance(ch,sh));
-} */
 
 
 
@@ -180,3 +176,83 @@ void MainWindow::on_edit_rechavanc_prod_3_textChanged(const QString &arg1)
 
 
 
+
+void MainWindow::on_tri_1_activated(const QString &arg1)
+{
+    if (arg1 == "Cin"){
+    ui->tableView_course_3->setModel(tmpm.getemployeestriid());
+    }
+    else if (arg1 == "Nom"){
+    ui->tableView_course_3->setModel(tmpm.getemployeestrinom());
+    }
+    else if (arg1 == "prenom"){
+    ui->tableView_course_3->setModel(tmpm.getemployeestriprenom());
+    }
+
+    else if (arg1 == "age"){
+    ui->tableView_course_3->setModel(tmpm.getemployeestriage());
+    }
+
+    else if (arg1 == "poste"){
+    ui->tableView_course_3->setModel(tmpm.getemployeestriposte());
+}
+}
+
+
+void MainWindow::sendMail()
+{
+    Smtp* smtp = new Smtp(ui->uname->text(), ui->paswd->text(), ui->server->text(), ui->port->text().toInt(), 30000);
+    connect(smtp, SIGNAL(status(QString)), this, SLOT(mailSent(QString)));
+
+
+    smtp->sendMail(ui->uname->text(), ui->rcpt->text() , ui->subject->text(),ui->msg->toPlainText());
+}
+
+void MainWindow::mailSent(QString status)
+{
+    if(status == "Message sent")
+        QMessageBox::warning( 0, tr( "Qt Simple SMTP client" ), tr( "Message sent!\n\n" ) );
+}
+
+void MainWindow::on_pushButton_39_clicked()
+{
+   int cin = ui->edit_rechavanc_prod_4->text().toInt();
+
+    QSqlQuery  query=tmp.exporter(cin);
+   while (query.next())
+             {
+               QString SALAIRE = query.value(0).toString();
+               QString DUREE = query.value(1).toString();
+               QString DATEDEB = query.value(2).toString();
+               QString EMAIL = query.value(3).toString();
+               QString CIN = query.value(4).toString();
+               QPdfWriter pdf1("C:/Users/ASUS/Documents/PROJET_2A11_RH/Exportation.pdf");
+               QPainter painter (&pdf1);
+               painter.drawText(2200,3500,SALAIRE);
+               painter.drawText(2200,4000,DUREE);
+               painter.drawText(2200,4500,DATEDEB);
+               painter.drawText(2200,5000,EMAIL);
+               painter.drawText(2200,5500,CIN);
+             painter.setPen(Qt::blue);
+             painter.drawText(4500,2000,"Contrat");
+             painter.setPen(Qt::blue);
+             painter.drawText(500,3500,"salaire :");
+             painter.drawText(500,4000,"duree :");
+             painter.drawText(500,4500,"Date deb:");
+             painter.drawText(500,5000,"EMAIL :");
+             painter.drawText(500,5500,"CIN :");
+   }
+
+}
+
+
+
+
+void MainWindow::on_edit_rechavanc_prod_4_textChanged(const QString &arg1)
+{
+    QString ch = ui->edit_rechavanc_prod_4->text();
+
+
+    contrat *p=new contrat();
+    ui->tableView_course_4->setModel(p->getAllcontratavance(ch));
+}
