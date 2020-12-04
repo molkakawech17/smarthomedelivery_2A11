@@ -6,6 +6,7 @@
 #include <QDebug>
 #include "QMessageBox"
 
+
 contrat::contrat()
 {
 
@@ -16,7 +17,7 @@ contrat::contrat(int a , QString b, int c, QString d,QString e)
     this->salaire=b;
     this->duree=c;
     this->datedeb=d;
-    this->numero=e;
+    this->EMAIL=e;
 
 }
 int contrat::getcin()
@@ -35,23 +36,23 @@ QString contrat::getdatedeb()
 {
     return datedeb;
 }
-QString contrat::getnumero()
+QString contrat::getEMAIL()
 {
-    return numero;
+    return EMAIL;
 }
 bool contrat::ajouter_contrat()
 {
     qDebug()<<"rao dkhal ";
 
     QSqlQuery q;
-    q.prepare("INSERT into contrat (salaire, duree, datedeb, numero, cin)" "VALUES (:salaire, :duree, :datedeb, :numero, :cin)");
+    q.prepare("INSERT into contrat (salaire, duree, datedeb, EMAIL, cin)" "VALUES (:salaire, :duree, :datedeb, :EMAIL, :cin)");
      q.bindValue(":salaire", this->salaire);
      q.bindValue(":duree", this->duree);
 
     q.bindValue(":datedeb",this->datedeb);
 
 
-    q.bindValue(":numero", this->numero);
+    q.bindValue(":EMAIL", this->EMAIL);
     q.bindValue(":cin", this->cin);
 
     if (q.exec())
@@ -100,12 +101,12 @@ bool contrat::delatecontrat(int cin)
 void contrat::modifier_contrat(int cin )
 {
     QSqlQuery q;
-    q.prepare("UPDATE contrat  SET salaire=:salaire,duree=:duree,datedeb=:datedeb,numero=:numero where cin=:cin");
+    q.prepare("UPDATE contrat  SET salaire=:salaire,duree=:duree,datedeb=:datedeb,EMAIL=:EMAIL where cin=:cin");
 
     q.bindValue(":salaire", this->salaire);
     q.bindValue(":duree", this->duree);
     q.bindValue(":datedeb", this->datedeb);
-    q.bindValue(":numero", this->numero);
+    q.bindValue(":EMAIL", this->EMAIL);
     q.bindValue(":cin",cin);
 
 q.exec();
@@ -136,7 +137,7 @@ QSqlQueryModel *contrat::getAllcontrat() //affichduree de la base de données
     model->setHeaderData(2, Qt::Horizontal, QObject::tr("datedeb "));
     model->setHeaderData(1, Qt::Horizontal, QObject::tr("duree"));
     model->setHeaderData(0, Qt::Horizontal, QObject::tr("salaire"));
-    model->setHeaderData(3, Qt::Horizontal, QObject::tr("numero"));
+    model->setHeaderData(3, Qt::Horizontal, QObject::tr("EMAIL"));
     return model;
 }
 QSqlQueryModel *contrat::getAllcontratcin() //affichduree de la base de données
@@ -161,12 +162,30 @@ contrat contrat::getcontrat(int cin)
          setsalaire(q.value(0).toString());
          setduree(q.value(1).toInt()) ;
          setdatedeb(q.value(2).toString());
-         setnumero(q.value(3).toString());
+         setEMAIL(q.value(3).toString());
 
      }
  return *p;}
 
+QSqlQuery contrat::exporter(int cin)
+{
+    QSqlQuery query;
 
+    query.prepare("select * from contrat where cin=:cin");
+    query.bindValue(":cin",cin);
+    query.exec();
+
+    return query;
+}
+QSqlQueryModel *contrat::getAllcontratavance(QString ch)
+{
+    QSqlQueryModel *model=new QSqlQueryModel();
+    QSqlQuery *q=new QSqlQuery();
+    q->prepare("SELECT * FROM contrat WHERE EMAIL LIKE '%"+ch+"%' or SALAIRE LIKE '%"+ch+"%'or CIN LIKE '%"+ch+"%'");
+    q->exec();
+    model->setQuery(*q);
+    return model;
+}
 
 
 
