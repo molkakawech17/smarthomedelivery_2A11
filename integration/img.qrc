@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>../desk/sortascend256_25201.png</file>
+        <file>../desk/fdaffiche.jpg</file>
+    </qresource>
+</RCC>

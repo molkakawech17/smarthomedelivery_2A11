@@ -1,0 +1,23 @@
+#Gestion_produits {
+background: url(:/img/fdaffiche.jpg);
+}
+
+#centralwidget {
+background: url(:/img/fdaffiche.jpg);
+}
+
+
+#toolBox {
+border: 3px solid gray;
+border-radius: 40px;
+background: rgb(206, 206, 206);
+}
+
+QLineEdit {
+padding: 1px;
+border-style: solid;
+border: 2px solid gray;
+border-radius: 8px;
+background-color: rgb(143, 143, 143);
+
+}
