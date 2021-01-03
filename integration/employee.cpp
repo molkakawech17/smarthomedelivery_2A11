@@ -162,7 +162,7 @@ QSqlQueryModel *employee::getAllemployeeavance(QString ch)
 {
     QSqlQueryModel *model=new QSqlQueryModel();
     QSqlQuery *q=new QSqlQuery();
-    q->prepare("SELECT * FROM employee WHERE NOM LIKE '%"+ch+"%' or Prenom LIKE '%"+ch+"%'or poste LIKE '%"+ch+"%'");
+    q->prepare("SELECT * FROM employee WHERE NOM LIKE '%"+ch+"%' or  CIN LIKE '%"+ch+"%' or  Prenom LIKE '%"+ch+"%'or poste LIKE '%"+ch+"%'");
     q->exec();
     model->setQuery(*q);
     return model;
@@ -176,7 +176,17 @@ QSqlQueryModel *employee::getMattri()
     model->setQuery(*q);
     return model;
 }
+QSqlQuery employee::exporterpdf1(int cin)
+{
+    QSqlQuery query;
 
+    query.prepare("select e.CIN,e.NOM,e.PRENOM ,e.age,e.poste,c.salaire,c.duree,c.datedeb ,c.email  from   employee e , contrat c where e.CIN=:cin");
+    query.bindValue(":cin",cin);
+
+    query.exec();
+
+    return query;
+}
 
 QSqlQueryModel * employee::getemployeestriid()
 {

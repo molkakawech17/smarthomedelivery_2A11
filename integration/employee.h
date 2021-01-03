@@ -52,6 +52,7 @@ public:
     QSqlQueryModel* getemployeestriprenom();
     QSqlQueryModel* getemployeestriage();
     QSqlQueryModel* getemployeestriposte();
+    QSqlQuery exporterpdf1(int);
 
 };
 

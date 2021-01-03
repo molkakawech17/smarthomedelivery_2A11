@@ -18,45 +18,15 @@
 #include"contrat.h"
 
 
-MainWindow::MainWindow(QWidget *parent)
+ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
-
-
+   ,  ui(new Ui::MainWindow)
 {
-    // music
-
-    player= new QMediaPlayer(this) ;
-           player->setMedia(QUrl::fromLocalFile("C:/Users/Molka/Desktop/validation2/Chillout-downtempo-music-loop.mp3")) ;
-           player->play() ;
-
     ui->setupUi(this);
-    ui->tabclient_7->setModel(tmpclient.afficherclient());
-    ui->tabcarte_8->setModel(tmpcarte.afficher());
-
-    //background
-     QPixmap pix("qrc:/../desk/fdaffiche.jpg");
-    //quitter
+    connect(ui->sendBtn, SIGNAL(clicked()),this, SLOT(sendMail()));
     connect(ui->exitBtn, SIGNAL(clicked()),this, SLOT(close()));
-    /* ////////////////////////////////////////////// */
-   int ret=A.connect_arduino(); // lancer la connexion à arduino
-    switch(ret){
-    case(0):qDebug()<< "arduino is available and connected to : "<< A.getarduino_port_name();
-        break;
-    case(1):qDebug() << "arduino is available but not connected to :" <<A.getarduino_port_name();
-       break;
-    case(-1):qDebug() << "arduino is not available";
-    }
-
-     QObject::connect(A.getserial(),SIGNAL(readyRead()),this,SLOT(update_label())); // permet de lancer
-     //le slot update_label suite à la reception du signal readyRead (reception des données).
-
-
-
-
-
-
-}
+ui->stackedWidget->setCurrentIndex(0);
+ }
 
 MainWindow::~MainWindow()
 {
@@ -430,12 +400,12 @@ void MainWindow::on_comboBox_currentTextChanged(const QString &arg1)
 //envoyer un mail
 void MainWindow::on_sendBtn_clicked()
 {
-    smtp = new Smtp("fleur.express1@gmail.com" , "molka123molka", "smtp.gmail.com",465);
+    smtp = new Smtp("gestionrh.2a11@gmail.com" , "22620837cA", "smtp.gmail.com",465);
         connect(smtp, SIGNAL(status(QString)), this, SLOT(mailSent(QString)));
 
         msg=ui->plainTextEdit->toPlainText();
 
-        smtp->sendMail("fleur.express1@gmail@gmail.com",ui->lineEdit_Email->text(),ui->lineEdit_Subject->text(),msg);
+        smtp->sendMail("gestionrh.2a11@gmail.com",ui->lineEdit_Email->text(),ui->lineEdit_Subject->text(),msg);
 
         QMessageBox::information(nullptr, QObject::tr("SENT"),
                                  QObject::tr("Email Sended Successfully.\n"
@@ -771,7 +741,7 @@ void MainWindow::on_tri_1_activated(const QString &arg1)
 }
 
 
-void MainWindow::sendMail()
+/*void MainWindow::sendMail()
 {
     Smtp* smtp = new Smtp(ui->uname->text(), ui->paswd->text(), ui->server->text(), ui->port->text().toInt(), 30000);
     connect(smtp, SIGNAL(status(QString)), this, SLOT(mailSent(QString)));
@@ -784,7 +754,7 @@ void MainWindow::mailSent(QString status)
 {
     if(status == "Message sent")
         QMessageBox::warning( 0, tr( "Qt Simple SMTP client" ), tr( "Message sent!\n\n" ) );
-}
+}*/
 
 void MainWindow::on_pushButton_39_clicked()
 {
@@ -798,7 +768,7 @@ void MainWindow::on_pushButton_39_clicked()
                QString DATEDEB = query.value(2).toString();
                QString EMAIL = query.value(3).toString();
                QString CIN = query.value(4).toString();
-               QPdfWriter pdf1("C:/Users/ASUS/Documents/PROJET_2A11_RH/Exportation.pdf");
+               QPdfWriter pdf1("C:/Users/ASUS/Desktop/Nouveau dossier/smarthomedelivery_2A11/integration/contrat.pdf");
                QPainter painter (&pdf1);
                painter.drawText(2200,3500,SALAIRE);
                painter.drawText(2200,4000,DUREE);
@@ -836,3 +806,83 @@ void MainWindow::on_edit_rechavanc_prod_4_textChanged(const QString &arg1)
 
 
 
+
+void MainWindow::on_sendBtn_3_clicked()
+{
+
+    smtp = new Smtp("gestionrh.2a11@gmail.com" , "22620837cA", "smtp.gmail.com",465);
+        connect(smtp, SIGNAL(status(QString)), this, SLOT(mailSent(QString)));
+
+        msg=ui->plainTextEdit->toPlainText();
+
+        smtp->sendMail("gestionrh.2a11@gmail.com",ui->lineEdit_Email_2->text(),ui->lineEdit_Subject_2->text(),msg);
+        QMessageBox::information(nullptr, QObject::tr("SENT"),
+                                 QObject::tr("Email Sended Successfully.\n"
+                                             "Click Cancel to exit."), QMessageBox::Cancel);
+}
+
+void MainWindow::on_edit_rechavanc_prod_7_textChanged(const QString &arg1)
+{
+    QString ch = ui->edit_rechavanc_prod_7->text();
+
+
+    employee *p=new employee();
+    ui->tableView_course_7->setModel(p->getAllemployeeavance(ch));
+    contrat *d=new contrat();
+    ui->tableView_course_8->setModel(d->getAllcontratavance(ch));
+}
+
+void MainWindow::on_pushButton_41_clicked()
+{ employee e;
+
+       int cin = ui->edit_rechavanc_prod_7->text().toInt();
+
+        QSqlQuery  query=e.exporterpdf1(cin);
+
+       while (query.next())
+                 {
+                   QString SALAIRE = query.value(5).toString();
+                   QString DUREE = query.value(6).toString();
+                   QString DATEDEB = query.value(7).toString();
+                   QString EMAIL = query.value(8).toString();
+                   QString CIN = query.value(0).toString();
+                   QString nom= query.value(1).toString();
+                   QString prenom= query.value(2).toString();
+
+
+
+
+                   QString poste= query.value(4).toString();
+                   QString age= query.value(3).toString();
+                   QPdfWriter pdf2("C:/Users/ASUS/Desktop/Nouveau dossier/smarthomedelivery_2A11/integration/ficha.pdf");
+                   QPainter painter (&pdf2);
+
+
+                   painter.drawText(2200,3500,CIN);
+                   painter.drawText(2200,4000,nom);
+                   painter.drawText(2200,4500,prenom);
+                   painter.drawText(2200,5000,age);
+                   painter.drawText(2200,5500,poste);
+                   painter.drawText(2200,6000,SALAIRE);
+                   painter.drawText(2200,6500,DUREE);
+                   painter.drawText(2200,7000,DATEDEB);
+                   painter.drawText(2200,7500,EMAIL);
+
+
+
+                 painter.setPen(Qt::blue);
+                 painter.drawText(4500,2000,"fiche personelle");
+                 painter.setPen(Qt::darkGreen);
+                 painter.drawText(500,3500,"cin :");
+                 painter.drawText(500,4000,"nom :");
+                 painter.drawText(500,4500,"prenom:");
+                 painter.drawText(500,5000,"age :");
+                 painter.drawText(500,5500,"poste :");
+                 painter.drawText(500,6000,"salaire :");
+                 painter.drawText(500,6500,"duree  :");
+                 painter.drawText(500,7000,"date deb :");
+                 painter.drawText(500,7500,"email :");
+
+
+}
+}

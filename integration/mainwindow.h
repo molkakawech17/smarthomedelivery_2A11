@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include "client.h"
-#include "login.h"
+#include "connexion.h"
 #include "carte.h"
 #include "arduino.h"
 #include <QString>
@@ -87,8 +87,8 @@ private slots:
      void on_pushButton_13_clicked();
 
      void on_ajouter_prod_4_clicked();
-     void sendMail();
-     void mailSent(QString);
+   //  void sendMail();
+     //void mailSent(QString);
 
     // void on_sendBtn_clicked();
 
@@ -127,7 +127,7 @@ private slots:
      void on_tri_1_activated(const QString &arg1);
 
 
-     void on_tableView_course_3_activated(const QModelIndex &index);
+     //void on_tableView_course_3_activated(const QModelIndex &index);
 
    //  void on_sendBtn_clicked();
 
@@ -135,7 +135,19 @@ private slots:
 
      void on_edit_rechavanc_prod_4_textChanged(const QString &arg1);
 
-     void on_connecter_clicked(bool checked);
+    // void on_connecter_clicked(bool checked);
+
+     void on_sendBtn_3_clicked();
+
+    // void on_sendBtn_2_clicked();
+
+    // void on_edit_rechavanc_prod_4_cursorPositionChanged(int arg1, int arg2);
+
+     void on_edit_rechavanc_prod_7_textChanged(const QString &arg1);
+
+   //  void on_pushButton_41_clicked();
+
+     void on_pushButton_41_clicked();
 
 private:
     Ui::MainWindow *ui;
