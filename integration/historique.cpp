@@ -2,7 +2,7 @@
 
 historique::historique()
 {
-mFilename="C:/Users/Molka/Desktop/validation2/historique.txt";
+mFilename="C:/Users/21695/Desktop/validation3/integration/Nouveau document texte.txt";
 mFilename1="C:/Users/Molka/Desktop/validation2/historique1.txt";
 }
 QString historique::read()
