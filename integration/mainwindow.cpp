@@ -2972,6 +2972,6 @@ void MainWindow::on_pb_ajouter_mortadha_2_clicked()//ajouter publi
 
 }
 
-
+//BBBBBBBBBBBBBBBBBBBBBBBB
 
 
